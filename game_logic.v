@@ -28,7 +28,7 @@ wire [4:0] board[31:0];
 
 genvar i;
 generate for (i=0; i<31; i=i+1) begin: BOARD
-	assign board[i] = board_input[i*6+5 : i*6];
+	assign board[i] = board_input[i*5+4 : i*5];
 end
 endgenerate
 
@@ -49,7 +49,7 @@ output wire is_in_initial_state;
 assign is_in_initial_state = (state == INITIAL);
 
 // wires for the contents of the board input
-wire[3:0] cursor_contents, selected_contents;
+wire[4:0] cursor_contents, selected_contents;
 assign cursor_contents = board[cursor_addr]; // contents of the cursor square
 assign selected_contents = board[selected_addr]; // contents of the selected square
 
@@ -81,7 +81,8 @@ localparam INITIAL = 3'b000,
             PIECE_SEL = 3'b001, 
             PIECE_MOVE= 3'b010,
             WRITE_NEW_PIECE = 3'b011, 
-            ERASE_OLD_PIECE = 3'b100;
+            ERASE_OLD_PIECE = 3'b100,
+            FLIP_CHESS = 3'b101;
 output reg[2:0] state;
 assign hilite_selected_square = (state == PIECE_MOVE);
 
@@ -95,7 +96,7 @@ always @ (posedge CLK, posedge RESET) begin
         cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
         selected_addr <= 5'bXXXXX;
 
-        board_out_addr <= 5'b00_0000;
+        board_out_addr <= 5'b00_000;
         board_out_piece <= 5'b0_000_0;
         board_change_enable <= 0;
 	
@@ -110,6 +111,16 @@ always @ (posedge CLK, posedge RESET) begin
 
                 // RTL operations
             end
+				
+				
+		    FLIP_CHESS:
+            begin
+                board_change_enable <= 1;
+                board_out_addr <= selected_addr;
+                board_out_piece <= {selected_contents[4:1], STATE_UNCOVERED};
+                state <= ERASE_OLD_PIECE;
+            end
+				
 
             PIECE_SEL:
             begin
@@ -121,8 +132,9 @@ always @ (posedge CLK, posedge RESET) begin
                             // flip the chess
                             if (cursor_contents[0:0] == STATE_COVERED)
                                 begin
-                                state <= FLIP;
-										 end
+                                state <= FLIP_CHESS;
+										  end
+
                             else begin
                                 state <= PIECE_MOVE;
                             end
@@ -169,13 +181,7 @@ always @ (posedge CLK, posedge RESET) begin
                 end
             end
 
-            FLIP:
-            begin
-                board_change_enable <= 1;
-                board_out_addr <= selected_addr;
-                board_out_piece <= {selected_contents[4:1], STATE_UNCOVERED};
-                state <= ERASE_OLD_PIECE;
-            end
+            
 
             WRITE_NEW_PIECE:
             begin
@@ -214,6 +220,10 @@ always @ (posedge CLK, posedge RESET) begin
 		 else if (keyD && cursor_addr[4:3] != 2'b11)
 			cursor_addr <= cursor_addr + 5'b01_000; // Down Move, not allowed when y == 3
 	end
+end
+
+
+	
 /* Combinational logic to 1;determine if the selected piece can move as desired */
 // really only valid when 1;in PIECE_MOVE state
 // selected_contents is th1;e piece we're trying to move
@@ -237,36 +247,29 @@ always @(*) begin
         begin
             if (player_to_move == COLOR_RED) begin 
                 // if it moves downward 1 unit, it is allowed
-                if (cursor_addr[4:3] > selected_addr[4:3] && 
-                    cursor_addr[4:3] - selected_addr[4:3] = 1 && 
-                    cursor_addr[2:0] - selected_addr[2:0] = 0)
-                    begin
-                        move_is_legal = 1;
-                    end
+                if ((cursor_addr[4:3] > selected_addr[4:3])
+						 && ((cursor_addr[4:3] - selected_addr[4:3]) = 1)
+						 && ((cursor_addr[2:0] - selected_addr[2:0]) = 0))
+                   move_is_legal = 1;
 
                 // if it moves upward 1 unit, it is allowed
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] = 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] = 0)
-                    begin
                         move_is_legal = 1;
-                    end
                 
                 // if it moves left 1 unit, it is allowed
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] = 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] = 0)
-                    begin
                         move_is_legal = 1;
-                    end
+
                 
                 // if it moves right 1 unit, it is allowed
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] = 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] = 0)
-                    begin
                         move_is_legal = 1;
-                    end 
                 else move_is_legal = 0;
             end
 
@@ -274,32 +277,32 @@ always @(*) begin
                 if (cursor_addr[4:3] > selected_addr[4:3] && 
                     cursor_addr[4:3] - selected_addr[4:3] = 1 && 
                     cursor_addr[2:0] - selected_addr[2:0] = 0)
-                    begin
+                    
                         move_is_legal = 1;
-                    end
+                    
 
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] = 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] = 0)
-                    begin
+                    
                         move_is_legal = 1;
-                    end
+                    
                 
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] = 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] = 0)
-                    begin
                         move_is_legal = 1;
-                    end
+                    
 
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] = 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] = 0)
-                    begin
                         move_is_legal = 1;
-                    end 
+
                 else move_is_legal = 0;
             end
 		end
-    end
+ end
 endmodule
+
+
