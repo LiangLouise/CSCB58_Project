@@ -40,7 +40,7 @@ reg board_change_enable; // signal the board reg in top to write the new piece t
 output wire board_change_en_wire;
 assign board_change_en_wire = board_change_enable;
 
-// outputs for communicating with the VGA module
+// outputs for communicating with the module
 output reg[4:0] cursor_addr;
 output reg[4:0] selected_addr;
 output wire hilite_selected_square;
@@ -248,55 +248,55 @@ always @(*) begin
             if (player_to_move == COLOR_RED) begin 
                 // if it moves downward 1 unit, it is allowed
                 if ((cursor_addr[4:3] > selected_addr[4:3])
-						 && ((cursor_addr[4:3] - selected_addr[4:3]) = 1)
-						 && ((cursor_addr[2:0] - selected_addr[2:0]) = 0))
+						 && ((cursor_addr[4:3] - selected_addr[4:3]) == 1)
+						 && ((cursor_addr[2:0] - selected_addr[2:0]) == 0))
                    move_is_legal = 1;
 
                 // if it moves upward 1 unit, it is allowed
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
-                        cursor_addr[4:3] - selected_addr[4:3] = 1 && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 0)
+                        cursor_addr[4:3] - selected_addr[4:3] == 1 && 
+                        cursor_addr[2:0] - selected_addr[2:0] == 0)
                         move_is_legal = 1;
                 
                 // if it moves left 1 unit, it is allowed
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 1 && 
-                        cursor_addr[4:3] - selected_addr[4:3] = 0)
+                        cursor_addr[2:0] - selected_addr[2:0] == 1 && 
+                        cursor_addr[4:3] - selected_addr[4:3] == 0)
                         move_is_legal = 1;
 
                 
                 // if it moves right 1 unit, it is allowed
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 1 &&
-                        cursor_addr[4:3] - selected_addr[4:3] = 0)
+                        cursor_addr[2:0] - selected_addr[2:0] == 1 &&
+                        cursor_addr[4:3] - selected_addr[4:3] == 0)
                         move_is_legal = 1;
                 else move_is_legal = 0;
             end
 
             else if (player_to_move == COLOR_BLACK) begin
                 if (cursor_addr[4:3] > selected_addr[4:3] && 
-                    cursor_addr[4:3] - selected_addr[4:3] = 1 && 
-                    cursor_addr[2:0] - selected_addr[2:0] = 0)
+                    cursor_addr[4:3] - selected_addr[4:3] ==1 && 
+                    cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
                         move_is_legal = 1;
                     
 
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
-                        cursor_addr[4:3] - selected_addr[4:3] = 1 && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 0)
+                        cursor_addr[4:3] - selected_addr[4:3] == 1 && 
+                        cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
                         move_is_legal = 1;
                     
                 
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 1 && 
-                        cursor_addr[4:3] - selected_addr[4:3] = 0)
+                        cursor_addr[2:0] - selected_addr[2:0] == 1 && 
+                        cursor_addr[4:3] - selected_addr[4:3] == 0)
                         move_is_legal = 1;
                     
 
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
-                        cursor_addr[2:0] - selected_addr[2:0] = 1 &&
-                        cursor_addr[4:3] - selected_addr[4:3] = 0)
+                        cursor_addr[2:0] - selected_addr[2:0] == 1 &&
+                        cursor_addr[4:3] - selected_addr[4:3] == 0)
                         move_is_legal = 1;
 
                 else move_is_legal = 0;
