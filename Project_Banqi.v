@@ -9,6 +9,16 @@ module project(CLOCK_50,
 		wire reset;
 		assign reset = SW[1];
 		
+		output [7:0]VGA_R;
+		output [7:0]VGA_G;
+		output [7:0]VGA_B;
+
+		output VGA_CLK;
+		output VGA_HS;
+		output VGA_BLANK_N;
+		output VGA_SYNC_N;
+		output VGA_VS;
+		
 		
 		/* Piece Definitions */
 		// {COLOR, PIECE, STATE}
@@ -74,7 +84,7 @@ module project(CLOCK_50,
 			.vga_vss(VGA_VS), 
 			.BOARD(passable_board),
 			.CURSOR(cursor_addr),
-			.SELECTED(selected_piece_addr)
+			.SELECTED(selected_piece_addr),
 			.SELECT_EN(board_change_en_wire)
 			);	
 	
