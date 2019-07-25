@@ -1,6 +1,6 @@
 
-module game_logic(CLOCK_50,
-		KEY, SW, LEDR);
+module project(CLOCK_50,
+		KEY, SW, LEDR, VGA_R, VGA_G, VGA_B, VGA_BLANK_N,VGA_CLK,VGA_HS,VGA_SYNC_N,VGA_VS);
 		
 		input CLOCK_50;
 		input	[1:0] SW;
@@ -62,7 +62,24 @@ module game_logic(CLOCK_50,
 			.state(logic_state), .move_is_legal(LEDR[0]), .is_in_initial_state(is_in_initial_state)
 			);
 		
-		
+		draw draw_board(
+			.clock50(CLOCK_50),
+			.vga_blue(VGA_B),
+			.vga_blank_nn(VGA_BLANK_N),
+			.vga_clock(VGA_CLK),
+			.vga_green(VGA_G),
+			.vga_hss(VGA_HSS),
+			.vga_red(VGA_R),
+			.vga_sync_nn(VGA_SYN_N),
+			.vga_vss(VGA_VS), 
+			.BOARD(passable_board),
+			.CURSOR(cursor_addr),
+			.SELECTED(selected_piece_addr)
+			.SELECT_EN(board_change_en_wire)
+			);	
+	
+	
+	
 		always @(posedge CLK_50)
 		begin 
 			if (Reset != 1) begin 
