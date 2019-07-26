@@ -451,6 +451,27 @@ begin
 			greenValue <= 8'b11111111;
 	end
 	
+	//cursor
+	else if(XPixelPosition > 0 && XPixelPosition < 0+142 && YPixelPosition > 0 && YPixelPosition < 0+10)begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+	end
+	else if(XPixelPosition > 0 && XPixelPosition < 0+10 && YPixelPosition > 0 && YPixelPosition < 0+256)begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+	end
+	else if(XPixelPosition > 0 && XPixelPosition < 0+142 && YPixelPosition > 0+246 && YPixelPosition < 0+256)begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+	end
+	else if(XPixelPosition > 0+132 && XPixelPosition < 0+142 && YPixelPosition > 0 && YPixelPosition < 0+256)begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+	end
 	
 	else begin
 			redValue <= 8'b00000000;
