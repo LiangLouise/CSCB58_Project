@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module logic( 
+module B58_project( 
     CLK, RESET,
     board_input,
     board_out_addr,
@@ -21,7 +21,7 @@ module logic(
 /* Inputs */
 input wire CLK, RESET;
 input wire keyL, keyU, keyR, keyD, keyC;
-
+              
 input wire [159:0] board_input; // board info: state and chess_rep
 
 wire [4:0] board[31:0];
@@ -202,7 +202,7 @@ always @ (posedge CLK, posedge RESET) begin
 
                 // RTL operations
                 board_change_enable <= 0;
-                board_out_addr <= 5'bXXXXX;
+                board_out_addr <= 6'bXXXXXX;
                 board_out_piece <= 4'bXXXX;
 
                 player_to_move <= ~player_to_move;
@@ -250,27 +250,27 @@ always @(*) begin
                 if ((cursor_addr[4:3] > selected_addr[4:3])
 						 && ((cursor_addr[4:3] - selected_addr[4:3]) == 1)
 						 && ((cursor_addr[2:0] - selected_addr[2:0]) == 0))
-                   move_is_legal <= 1;
+                   move_is_legal = 1;
 
                 // if it moves upward 1 unit, it is allowed
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] == 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] == 0)
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
                 
                 // if it moves left 1 unit, it is allowed
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
 
                 
                 // if it moves right 1 unit, it is allowed
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal <= 1;
-                else move_is_legal <= 0;
+                        move_is_legal = 1;
+                else move_is_legal = 0;
             end
 
             else if (player_to_move == COLOR_BLACK) begin
@@ -278,28 +278,28 @@ always @(*) begin
                     cursor_addr[4:3] - selected_addr[4:3] ==1 && 
                     cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
                     
 
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] == 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
                     
                 
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
                     
 
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal <= 1;
+                        move_is_legal = 1;
 
-                else move_is_legal <= 0;
+                else move_is_legal = 0;
             end
 		end
  end
