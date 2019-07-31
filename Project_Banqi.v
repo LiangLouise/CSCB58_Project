@@ -64,7 +64,7 @@ assign  passable_board[4 : 0] = { 1'b0 ,1'b001, 1'b1};
 		
 		logic logic_module(
 			.CLK(CLK_50), 
-			.RESET(Reset),
+			.RESET(reset),
 			.board_input(passable_board),
 
 			.board_out_addr(board_change_addr),
@@ -91,7 +91,7 @@ assign  passable_board[4 : 0] = { 1'b0 ,1'b001, 1'b1};
 			.SELECTED(selected_piece_addr),
 			.SELECT_EN(board_change_en_wire)
 			);	
-	wire [10:0] XPixelPosition;
+wire [10:0] XPixelPosition;
 wire [10:0] YPixelPosition; 
 
 wire	[7:0] redValue;
@@ -109,15 +109,15 @@ assign VGA_CLK = pixelClock;
 
 	VGAController VGAControl (pixelClock, redValue, greenValue, blueValue, VGA_R, VGA_G, VGA_B, VGA_VS, VGA_HS, XPixelPosition, YPixelPosition);
 	
-		always @(posedge CLK_50)
+		always @(*)
 		begin 
-			if (Reset != 1) begin 
-				if (board_change_en_wire == 1)  
-				begin
+			if (reset != 1) begin 
+				if (board_change_en_wire == 1'b1)  
+				begin 
 					board[board_change_addr] <= board_change_piece;
 				end
 			end
-			if (is_in_initial_state )
+			if (is_in_initial_state == 1'b1)
 			begin
 				board[24] <= { COLOR_RED ,PIECE_PAWN, STATE_UNCOVERED};
 				board[25] <= { COLOR_RED ,PIECE_PAWN, STATE_UNCOVERED};
@@ -218,32 +218,11 @@ input [4:0] CURSOR;
 input [4:0] SELECTED; 
 input SELECT_EN;
 input pixelClock;
-
-//input clock50;
-//output [7:0] vga_blue;
-//output vga_blank_nn;
-//output vga_clock;
-//output [7:0] vga_green;
-//output	vga_hss;
-//output [7:0] vga_red;
-//output vga_sync_nn;
-//output vga_vss;
-//reg	aresetPll = 0;
-//wire pixelClock;
 input [10:0] XPixelPosition;
 input [10:0] YPixelPosition; 
 output reg	[7:0] redValue;
 output reg	[7:0] greenValue;
 output reg	[7:0] blueValue;
-//
-//assign vga_blank_nn = 1'b1;
-//assign vga_sync_nn = 1'b1;			
-//assign vga_clock = pixelClock;
-//
-//VGAFrequency VGAFreq (aresetPll, clock50, pixelClock);
-//
-//VGAController VGAControl (pixelClock, redValue, greenValue, blueValue, vga_red, vga_green, vga_blue, vga_vss, vga_hss, XPixelPosition, YPixelPosition);
-
 
 localparam PIECE_NONE = 3'b000;
 localparam PIECE_SOLDIER = 3'b001;
