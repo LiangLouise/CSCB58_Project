@@ -88,27 +88,30 @@ assign hilite_selected_square = (state == PIECE_MOVE);
 
 /* State Machine */
 always @ (posedge CLK, posedge RESET) begin
-    if (RESET == 1'b1) begin
+    if (RESET) begin
+        // initialization code here
         state <= INITIAL;
+        
+	
     end
     else begin
         // State machine code from herPIECE_NONEe
         case (state)
-            INITIAL :
-            // Start the game by pressing the KeyC
-            begin
-            player_to_move <= COLOR_RED;
-        
-            cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
-            selected_addr <= 5'bXXXXX;
+            INITIAL : begin
+					player_to_move <= COLOR_RED;
+			  
+				  cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
+				  selected_addr <= 5'bXXXXX;
 
-            board_out_addr <= 5'b00_000;
-            board_out_piece <= 5'b0_000_0;
-            board_change_enable <= 0;
-            if (keyC)
-                begin
-                    state <= PIECE_SEL;
-                end
+				  board_out_addr <= 5'b00_000;
+				  board_out_piece <= 5'b0_000_0;
+				  board_change_enable <= 0;
+
+				 if (keyC)
+				 begin
+					  state <= PIECE_SEL;
+				 end
+                // RTL operations
             end
 				
 				
@@ -129,10 +132,11 @@ always @ (posedge CLK, posedge RESET) begin
                     && cursor_contents[3:1] != PIECE_NONE) 
 						begin
                             // flip the chess
-                            if (cursor_contents[0] == STATE_COVERED)
+                            if (cursor_contents[0:0] == STATE_COVERED)
                                 begin
                                 state <= FLIP_CHESS;
-								end
+										  end
+
                             else begin
                                 state <= PIECE_MOVE;
                             end
@@ -167,6 +171,15 @@ always @ (posedge CLK, posedge RESET) begin
                         end
 
                     end
+                    // else if (cursor_contents[3] == player_to_move
+                    //     && cursor_contents[2:0] != PIECE_NONE)
+                    // begin
+                    //     // they clicked their own piece
+                    //     selected_addr <= cursor_addr;
+                    // end
+					// 	  else begin
+					// 			state <= PIECE_SEL;
+					// 	  end
                 end
             end
 
