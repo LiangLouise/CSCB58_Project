@@ -569,7 +569,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			end
 		end //end draw king
 		if(CURSOR == 5'b00000) begin
-			if(XPixelPosition > 30+142 && XPixelPosition < 35+142 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
+			if(XPixelPosition > 30 && XPixelPosition < 35 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
 			greenValue <= 8'b11111111;
@@ -802,7 +802,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			end
 		end //end draw king
 		if(CURSOR == 5'b00001) begin
-			if(XPixelPosition > 30 && XPixelPosition < 35 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 35+142 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
 				redValue <= 8'b00000000;
 				blueValue <= 8'b00000000;
 				greenValue <= 8'b11111111;
