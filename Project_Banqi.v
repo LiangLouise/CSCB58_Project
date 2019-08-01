@@ -3,11 +3,11 @@ module project(CLOCK_50,
 		KEY, SW, LEDR, VGA_R, VGA_G, VGA_B, VGA_BLANK_N,VGA_CLK,VGA_HS,VGA_SYNC_N,VGA_VS);
 		
 		input CLOCK_50;
-		input	[1:0] SW;
+		input	[4:0] SW;
 		input [3:0] KEY;
 		output [4:0] LEDR;
 		wire reset;
-		assign reset = SW[1];
+		//assign reset = SW[1];
 		
 		output [7:0]VGA_R;
 		output [7:0]VGA_G;
@@ -67,34 +67,34 @@ module project(CLOCK_50,
 //assign passable_board[24:20] = {1'b0 ,3'b101, 1'b1};
 //assign passable_board[29:25] = {1'b0 ,3'b110, 1'b1};
 //assign passable_board[34:30] = {1'b0 ,3'b111, 1'b1};
-
-
 		
 		wire [4:0] board_change_addr;
 		wire [4:0] board_change_piece;
 		wire [4:0] cursor_addr;
 		wire [4:0] selected_piece_addr;
+		assign selected_piece_addr = SW[4:0];
+		
 		wire hilite_selected_square;
 		wire [2:0] logic_state;
 		wire board_change_en_wire;
 		wire is_in_initial_state;
 		
-		game_logic logic_module(
-			.CLK(CLK_50), 
-			.RESET(reset),
-			.board_input(passable_board),
-
-			.board_out_addr(board_change_addr),
-			.board_out_piece(board_change_piece),
-			.board_change_en_wire(board_change_en_wire),
-			.cursor_addr(cursor_addr),
-			.selected_addr(selected_piece_addr),
-			.hilite_selected_square(hilite_selected_square),
-
-			.keyU(SW[0] && KEY[3]), .keyL(KEY[2]), .keyC(KEY[1]),
-			.keyR(KEY[0]), .keyD(~SW[0] && KEY[3]),
-			.state(logic_state), .move_is_legal(LEDR[0]), .is_in_initial_state(is_in_initial_state)
-			);
+//		game_logic logic_module(
+//			.CLK(CLK_50), 
+//			.RESET(reset),
+//			.board_input(passable_board),
+//
+//			.board_out_addr(board_change_addr),
+//			.board_out_piece(board_change_piece),
+//			.board_change_en_wire(board_change_en_wire),
+//			.cursor_addr(cursor_addr),
+//			.selected_addr(selected_piece_addr),
+//			.hilite_selected_square(hilite_selected_square),
+//
+//			.keyU(SW[0] && KEY[3]), .keyL(KEY[2]), .keyC(KEY[1]),
+//			.keyR(KEY[0]), .keyD(~SW[0] && KEY[3]),
+//			.state(logic_state), .move_is_legal(LEDR[0]), .is_in_initial_state(is_in_initial_state)
+//			);
 		
 		draw draw_board(
 			.XPixelPosition(XPixelPosition),
@@ -4571,7 +4571,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			greenValue <= 8'b11111111;
 			end
 		end
-		if(SELECtED == 5'd17) begin
+		if(SELECTED == 5'd17) begin
 			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
@@ -5039,7 +5039,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			greenValue <= 8'b11111111;
 			end
 		end
-		if(SELECtED == 5'd19) begin
+		if(SELECTED == 5'd19) begin
 			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
@@ -6446,7 +6446,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			greenValue <= 8'b11111111;
 			end
 		end
-		if(SELECtED == 5'd25) begin
+		if(SELECTED == 5'd25) begin
 			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
@@ -7382,7 +7382,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			greenValue <= 8'b11111111;
 			end
 		end
-		if(SELECtED == 5'd28) begin
+		if(SELECTED == 5'd28) begin
 			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
