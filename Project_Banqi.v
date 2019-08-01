@@ -50,8 +50,8 @@ module project(CLOCK_50,
 //		end
 //		endgenerate
 
-assign  passable_board[4 : 0] = { 1'b0 ,1'b001, 1'b1};
-		
+assign passable_board[4 : 0] = { 1'b0 ,1'b001, 1'b1};
+assign passable_board		
 		
 		wire [4:0] board_change_addr;
 		wire [4:0] board_change_piece;
@@ -74,8 +74,8 @@ assign  passable_board[4 : 0] = { 1'b0 ,1'b001, 1'b1};
 			.selected_addr(selected_piece_addr),
 			.hilite_selected_square(hilite_selected_square),
 
-			.keyU(KEY[3]), .keyL(KEY[2]), .keyC(SW[0]),
-			.keyR(KEY[1]), .keyD(KEY[0]),
+			.keyU(SW[0] && KEY[3]), .keyL(KEY[2]), .keyC(KEY[1]),
+			.keyR(KEY[0]), .keyD( ~SW[0] && KEY[3]),
 			.state(logic_state), .move_is_legal(LEDR[0]), .is_in_initial_state(is_in_initial_state)
 			);
 		
