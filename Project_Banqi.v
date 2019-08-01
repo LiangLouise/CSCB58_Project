@@ -72,7 +72,7 @@ module project(CLOCK_50,
 		wire [4:0] board_change_piece;
 		wire [4:0] cursor_addr;
 		wire [4:0] selected_piece_addr;
-		assign selected_piece_addr = SW[4:0];
+		assign cursor_addr = SW[4:0];
 		
 		wire hilite_selected_square;
 		wire [2:0] logic_state;
@@ -7382,7 +7382,7 @@ localparam STATE_UNCOVERED = 1'b1;
 			greenValue <= 8'b11111111;
 			end
 		end
-		if(SELECTED == 5'd28) begin
+		if(SELECTED == 5'd29) begin
 			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
