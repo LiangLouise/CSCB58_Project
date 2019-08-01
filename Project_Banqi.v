@@ -568,8 +568,15 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
-		if(CURSOR == 5'b00000) begin
-			if(XPixelPosition > 30 && XPixelPosition < 35 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
+		if(CURSOR == 5'd0) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd0) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
 			greenValue <= 8'b11111111;
@@ -801,11 +808,18 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
-		if(CURSOR == 5'b00001) begin
-			if(XPixelPosition > 30+142 && XPixelPosition < 35+142 &&  YPixelPosition > 30 && YPixelPosition < 35) begin
-				redValue <= 8'b00000000;
-				blueValue <= 8'b00000000;
-				greenValue <= 8'b11111111;
+		if(CURSOR == 5'd1) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd1) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
 			end
 		end
 		
@@ -1031,6 +1045,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd2) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd2) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 		
 	end
 	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,3
@@ -1252,6 +1280,21 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd3) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd3) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		
 	end
 	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,4
 		if(BOARD[24] == COLOR_RED) begin
@@ -1472,6 +1515,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd4) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd4) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	
 	
@@ -1695,6 +1752,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd5) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd5) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,6
 		if(BOARD[34] == COLOR_RED) begin
@@ -1915,6 +1986,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd6) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd6) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,7
 		if(BOARD[39] == COLOR_RED) begin
@@ -2135,6 +2220,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd7) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd7) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30 && YPixelPosition < 50) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	
 	//row1
@@ -2357,6 +2456,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd8) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd8) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,1
 		if(BOARD[49] == COLOR_RED) begin
@@ -2577,6 +2690,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd9) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd9) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,2
 		if(BOARD[54] == COLOR_RED) begin
@@ -2797,6 +2924,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd10) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd10) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,3
 		if(BOARD[59] == COLOR_RED) begin
@@ -3017,6 +3158,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd11) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd11) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,4
 		if(BOARD[64] == COLOR_RED) begin
@@ -3237,6 +3392,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd12) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd12) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,5
 		if(BOARD[69] == COLOR_RED) begin
@@ -3457,6 +3626,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd13) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd13) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,6
 		if(BOARD[74] == COLOR_RED) begin
@@ -3677,6 +3860,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd14) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd14) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,7
 		if(BOARD[79] == COLOR_RED) begin
@@ -3897,6 +4094,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd15) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd15) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256 && YPixelPosition < 50+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	
 	//row2
@@ -4119,6 +4330,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd16) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd16) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,1
 		if(BOARD[89] == COLOR_RED) begin
@@ -4339,6 +4564,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd17) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECtED == 5'd17) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,2
 		if(BOARD[94] == COLOR_RED) begin
@@ -4559,6 +4798,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd18) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd18) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,3
 		if(BOARD[99] == COLOR_RED) begin
@@ -4779,6 +5032,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd19) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECtED == 5'd19) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,4
 		if(BOARD[104] == COLOR_RED) begin
@@ -4999,6 +5266,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd20) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd20) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,5
 		if(BOARD[109] == COLOR_RED) begin
@@ -5219,6 +5500,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd21) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd21) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,6
 		if(BOARD[114] == COLOR_RED) begin
@@ -5439,6 +5734,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd22) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(CURSOR == 5'd22) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,7
 		if(BOARD[119] == COLOR_RED) begin
@@ -5659,6 +5968,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd23) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd23) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256 && YPixelPosition < 50+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	
 	//row3
@@ -5881,6 +6204,21 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd24) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd24) begin
+			if(XPixelPosition > 30 && XPixelPosition < 50 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+
 	end
 	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,1
 		if(BOARD[129] == COLOR_RED) begin
@@ -6101,6 +6439,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd25) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECtED == 5'd25) begin
+			if(XPixelPosition > 30+142 && XPixelPosition < 50+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 314 && XPixelPosition < 406 && YPixelPosition > 798 && YPixelPosition < 994) begin //3,2
 		if(BOARD[134] == COLOR_RED) begin
@@ -6321,6 +6673,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd26) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd26) begin
+			if(XPixelPosition > 30+142+142 && XPixelPosition < 50+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,3
 		if(BOARD[139] == COLOR_RED) begin
@@ -6541,6 +6907,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd27) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd27) begin
+			if(XPixelPosition > 30+142+142+142 && XPixelPosition < 50+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,4
 		if(BOARD[144] == COLOR_RED) begin
@@ -6761,6 +7141,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd28) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd28) begin
+			if(XPixelPosition > 30+142+142+142+142 && XPixelPosition < 50+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,5
 		if(BOARD[149] == COLOR_RED) begin
@@ -6981,6 +7375,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd29) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECtED == 5'd28) begin
+			if(XPixelPosition > 30+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,6
 		if(BOARD[154] == COLOR_RED) begin
@@ -7201,6 +7609,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd30) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd30) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,7
 		if(BOARD[159] == COLOR_RED) begin
@@ -7421,6 +7843,20 @@ localparam STATE_UNCOVERED = 1'b1;
 					greenValue <= 8'b00000000;
 			end
 		end //end draw king
+		if(CURSOR == 5'd31) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
+		if(SELECTED == 5'd31) begin
+			if(XPixelPosition > 30+142+142+142+142+142+142+142 && XPixelPosition < 50+142+142+142+142+142+142+142 &&  YPixelPosition > 30+256+256+256 && YPixelPosition < 50+256+256+256) begin
+			redValue <= 8'b00000000;
+			blueValue <= 8'b00000000;
+			greenValue <= 8'b11111111;
+			end
+		end
 	end
 	
 	else begin
