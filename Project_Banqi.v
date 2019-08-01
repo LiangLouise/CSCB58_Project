@@ -225,7 +225,7 @@ output reg	[7:0] greenValue;
 output reg	[7:0] blueValue;
 
 localparam PIECE_NONE = 3'b000;
-localparam PIECE_SOLDIER = 3'b001;
+localparam PIECE_PAWN = 3'b001;
 localparam PIECE_CANNON = 3'b010;
 localparam PIECE_KNIGHT = 3'b011;
 localparam PIECE_ROOK = 3'b100;
@@ -245,9 +245,9 @@ always @(posedge pixelClock)
 begin
 	
 	//each position 5 bits
-	//bit1 -> colour
+	//bit4 -> colour
 	//bit2-4 -> piece
-	//bit5 -> state
+	//bit1 -> state
 	
 	
 		//horizontal lines
@@ -327,82 +327,325 @@ begin
 	//row0
 	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,0
 		
-		if(BOARD[4] == COLOR_RED) begin
+		if(BOARD[4] == COLOR_RED) begin //begin colour
 			//set colour red
 			redValue <= 8'b11111111;
 			blueValue <= 8'b00000000;
 			greenValue <= 8'b00000000;
-		end
-		else begin
+		end // end colour
+		else begin //begin else-colour
 			//set colour blue
 			redValue <= 8'b00000000;
 			blueValue <= 8'b11111111;
 			greenValue <= 8'b00000000;
-		end
+		end //end else colour
 		
-		if(BOARD[0] == STATE_COVERED)begin
+		if(BOARD[0] == STATE_COVERED)begin //begin statecovered
 			//draw WHITE
 			redValue <= 8'b11111111;
 			blueValue <= 8'b11111111;
 			greenValue <= 8'b11111111;
-		end
-		else if(BOARD[3:1] == PIECE_NONE)begin
+		end //end state covered
+		else if(BOARD[3:1] == PIECE_NONE)begin //begin piece none
 			//draw black
 			redValue <= 8'b00000000;
 			blueValue <= 8'b00000000;
 			greenValue <= 8'b00000000;
-		end
-		else if(BOARD[3:1] == PIECE_SOLDIER)begin
-		
-				if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+		end //end piece none
+		else if(BOARD[3:1] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
 					redValue <= 8'b00000000;
 					blueValue <= 8'b11111111;
 					greenValue <= 8'b11111111;
-				end
-				else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+			end
+			else if(XPixelPosition > 71+40 && XPixelPosition < 71+50 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
 					redValue <= 8'b00000000;
 					blueValue <= 8'b11111111;
 					greenValue <= 8'b11111111;
-				end
-				else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
-						redValue <= 8'b00000000;
-						blueValue <= 8'b11111111;
-						greenValue <= 8'b11111111;
-				end
-				
-				else if(XPixelPosition > 71+40 && XPixelPosition < 71+50 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
-						redValue <= 8'b00000000;
-						blueValue <= 8'b11111111;
-						greenValue <= 8'b11111111;
-				end
-				else begin 
-						redValue <= 8'b00000000;
-						blueValue <= 8'b00000000;
-						greenValue <= 8'b00000000;
-				end
-				
-				
-		end
-		else if(BOARD[3:1] == PIECE_CANNON)begin
-		
-		end
-		else if(BOARD[3:1] == PIECE_KNIGHT)begin
-		
-		end
-		else if(BOARD[3:1] == PIECE_ROOK)begin
-		
-		end
-		else if(BOARD[3:1] == PIECE_BISHOP) begin
-		
-		end
-		else if(BOARD[3:1] == PIECE_QUEEN) begin
-		
-		end
-		else if(BOARD[3:1] == PIECE_KING) begin
-		
-		end
-		
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[3:1] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[3:1] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40-142 && XPixelPosition < 213+40-142 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[3:1] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
 			
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10-142 && XPixelPosition < 213-142 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-142 && XPixelPosition < 213+10-142 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10-142 && XPixelPosition < 213+20-142 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20-142 && XPixelPosition < 213+30-142 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30-142 && XPixelPosition < 213+40-142 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[3:1] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+20-284 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+30-284 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[3:1] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+25-284 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-284 && XPixelPosition < 355+30-284 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+45-284 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-284 && XPixelPosition < 355+50-284 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[3:1] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-426 && XPixelPosition < 497-30-426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-426 && XPixelPosition < 497-10-426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
 	end
 	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,1
 		
@@ -431,27 +674,300 @@ begin
 			blueValue <= 8'b00000000;
 			greenValue <= 8'b00000000;
 		end
-		else if(BOARD[8:6] == PIECE_SOLDIER)begin
-		
-		end
-		else if(BOARD[8:6] == PIECE_CANNON)begin
-		
-		end
-		else if(BOARD[8:6] == PIECE_KNIGHT)begin
-		
-		end
-		else if(BOARD[8:6] == PIECE_ROOK)begin
-		
-		end
-		else if(BOARD[8:6] == PIECE_BISHOP) begin
-		
-		end
-		else if(BOARD[8:6] == PIECE_QUEEN) begin
-		
-		end
+		else if(BOARD[8:6] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[8:6] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[8:6] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40 && XPixelPosition < 213+40  && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40 && XPixelPosition < 213-30  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[8:6] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40  && XPixelPosition < 213-30  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30 && XPixelPosition < 213+50  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30  && XPixelPosition < 213+50  && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10 && XPixelPosition < 213  && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213  && XPixelPosition < 213+10  && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10  && XPixelPosition < 213+20  && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20  && XPixelPosition < 213+30  && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30  && XPixelPosition < 213+40  && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[8:6] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+20-142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+30-142 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[8:6] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+25-142 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-142 && XPixelPosition < 355+30-142 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+45-142 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-142 && XPixelPosition < 355+50-142 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
 		else if(BOARD[8:6] == PIECE_KING) begin
-		
-		end
+
+			if (XPixelPosition > 497-40-284 && XPixelPosition < 497-30-284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-284 && XPixelPosition < 497-10-284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
 		
 	end
 	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,2
@@ -472,27 +988,300 @@ begin
 		else if(BOARD[13:11] == PIECE_NONE)begin
 			//draw black
 		end
-		else if(BOARD[13:11] == PIECE_SOLDIER)begin
-		
-		end
-		else if(BOARD[13:11] == PIECE_CANNON)begin
-		
-		end
-		else if(BOARD[13:11] == PIECE_KNIGHT)begin
-		
-		end
-		else if(BOARD[13:11] == PIECE_ROOK)begin
-		
-		end
-		else if(BOARD[13:11] == PIECE_BISHOP) begin
-		
-		end
-		else if(BOARD[13:11] == PIECE_QUEEN) begin
-		
-		end
+		else if(BOARD[13:11] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[13:11] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[13:11] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142 && XPixelPosition < 213+40+142 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[13:11] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142 && XPixelPosition < 213+142 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142 && XPixelPosition < 213+10+142 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142 && XPixelPosition < 213+20+142 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142 && XPixelPosition < 213+30+142 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142 && XPixelPosition < 213+40+142 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[13:11] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+20  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+50 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+30 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40 && XPixelPosition < 355+50 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+50 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[13:11] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30 && XPixelPosition < 355+40  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+25 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25 && XPixelPosition < 355+30 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+45 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45 && XPixelPosition < 355+50 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
 		else if(BOARD[13:11] == PIECE_KING) begin
-		
-		end
+
+			if (XPixelPosition > 497-40-142 && XPixelPosition < 497-30-142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142 && XPixelPosition < 497-10-142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
 		
 	end
 	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,3
@@ -512,27 +1301,300 @@ begin
 		else if(BOARD[18:16] == PIECE_NONE)begin
 			//draw black
 		end
-		else if(BOARD[18:16] == PIECE_SOLDIER)begin
-		
-		end
-		else if(BOARD[18:16] == PIECE_CANNON)begin
-		
-		end
-		else if(BOARD[18:16] == PIECE_KNIGHT)begin
-		
-		end
-		else if(BOARD[18:16] == PIECE_ROOK)begin
-		
-		end
-		else if(BOARD[18:16] == PIECE_BISHOP) begin
-		
-		end
-		else if(BOARD[18:16] == PIECE_QUEEN) begin
-		
-		end
+		else if(BOARD[18:16] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[18:16] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[18:16] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[18:16] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+142 && XPixelPosition < 213+142+142 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+142 && XPixelPosition < 213+10+142+142 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+142 && XPixelPosition < 213+20+142+142 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+142 && XPixelPosition < 213+30+142+142 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[18:16] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+20+142  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+50+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+30+142 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[18:16] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+142 && XPixelPosition < 355+40+142  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+25+142 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+142 && XPixelPosition < 355+30+142 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+45+142 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+142 && XPixelPosition < 355+50+142 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
 		else if(BOARD[18:16] == PIECE_KING) begin
-		
-		end
+
+			if (XPixelPosition > 497-40-142+142 && XPixelPosition < 497-30-142+142 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+142 && XPixelPosition < 497-10-142+142 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
 	end
 	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,4
 		if(BOARD[20] == COLOR_RED) begin
@@ -551,1091 +1613,8734 @@ begin
 		else if(BOARD[23:21] == PIECE_NONE)begin
 			//draw black
 		end
-		else if(BOARD[23:21] == PIECE_SOLDIER)begin
-		
-		end
-		else if(BOARD[23:21] == PIECE_CANNON)begin
-		
-		end
-		else if(BOARD[23:21] == PIECE_KNIGHT)begin
-		
-		end
-		else if(BOARD[23:21] == PIECE_ROOK)begin
-		
-		end
-		else if(BOARD[23:21] == PIECE_BISHOP) begin
-		
-		end
-		else if(BOARD[23:21] == PIECE_QUEEN) begin
-		
-		end
+		else if(BOARD[23:21] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[23:21] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[23:21] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[23:21] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+284 && XPixelPosition < 213+142+284 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+284 && XPixelPosition < 213+10+142+284 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+284 && XPixelPosition < 213+20+142+284 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+284 && XPixelPosition < 213+30+142+284 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[23:21] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+20+284  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+50+284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+30+284 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[23:21] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+284 && XPixelPosition < 355+40+284  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+25+284 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+284 && XPixelPosition < 355+30+284 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+45+284 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+284 && XPixelPosition < 355+50+284 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
 		else if(BOARD[23:21] == PIECE_KING) begin
-		
-		end
+
+			if (XPixelPosition > 497-40-142+284 && XPixelPosition < 497-30-142+284 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+284 && XPixelPosition < 497-10-142+284 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
 	end
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,5
-//		if(BOARD[25] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[29] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[28:26] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[26:28] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[26:28] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,6
-//		if(BOARD[30] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[34] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[31:33] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[31:33] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[31:33] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,7
-//		if(BOARD[35] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[39] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[36:38] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[36:38] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[36:38] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	
-//	//row1
-//	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,0
-//		if(BOARD[40] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[44] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[41:43] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[41:43] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[41:43] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,1
-//		if(BOARD[45] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[49] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[46:48] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[46:48] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[46:48] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,2
-//		if(BOARD[50] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[54] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[51:53] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[51:53] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[51:53] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,3
-//		if(BOARD[55] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[59] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[56:58] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[56:58] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[56:58] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,4
-//		if(BOARD[60] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[64] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[61:63] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[61:63] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[61:63] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,5
-//		if(BOARD[65] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[69] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[66:68] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[66:68] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[66:68] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,6
-//		if(BOARD[70] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[74] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[71:73] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[71:73] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[71:73] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,7
-//		if(BOARD[75] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[79] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[76:78] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[76:78] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[76:78] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	
-//	//row2
-//	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,0
-//		if(BOARD[80] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[84] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[81:83] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[81:83] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[81:83] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,1
-//		if(BOARD[85] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[89] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[86:88] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[86:88] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[86:88] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,2
-//		if(BOARD[90] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[94] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[91:93] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[91:93] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[91:93] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,3
-//		if(BOARD[95] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[99] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[96:98] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[96:98] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[96:98] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,4
-//		if(BOARD[100] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[104] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[101:103] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[101:103] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[101:103] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,5
-//		if(BOARD[105] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[109] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[106:108] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[106:108] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[106:108] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,6
-//		if(BOARD[110] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[114] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[111:113] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[111:113] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[111:113] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,7
-//		if(BOARD[115] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[119] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[116:118] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[116:118] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[116:118] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	
-//	//row3
-//	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,0
-//		if(BOARD[120] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[124] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[121:123] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[121:123] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[121:123] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,1
-//		if(BOARD[125] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[129] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[126:128] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[126:128] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[126:128] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 314 && XPixelPosition < 406 && YPixelPosition > 798 && YPixelPosition < 994) begin //3,2
-//		if(BOARD[130] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[134] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[131:133] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[131:133] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[131:133] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,3
-//		if(BOARD[135] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[139] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[136:138] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[136:138] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[136:138] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,4
-//		if(BOARD[140] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[144] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[141:143] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[141:143] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[141:143] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,5
-//		if(BOARD[145] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[149] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[146:148] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[146:148] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[146:148] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,6
-//		if(BOARD[150] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[154] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[151:153] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[151:153] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[151:153] == PIECE_KING) begin
-//		
-//		end
-//	end
-//	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,7
-//		if(BOARD[155] == COLOR_RED) begin
-//			//set colour red
-//		end
-//		else begin
-//			//set colour blue
-//		end
-//		
-//		if(BOARD[159] == STATE_COVERED)begin
-//			//draw WHITE
-//			redValue <= 8'b11111111;
-//			blueValue <= 8'b11111111;
-//			greenValue <= 8'b11111111;
-//		end
-//		else if(BOARD[156:158] == PIECE_NONE)begin
-//			//draw black
-//		end
-//		else if(BOARD[156:158] == PIECE_SOLDIER)begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_CANNON)begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_KNIGHT)begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_ROOK)begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_BISHOP) begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_QUEEN) begin
-//		
-//		end
-//		else if(BOARD[156:158] == PIECE_KING) begin
-//		
-//		end
-//	end
+	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,5
+		if(BOARD[25] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[29] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[28:26] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[28:26] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[28:26] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[28:26] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[28:26] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+426 && XPixelPosition < 213+142+426 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+426 && XPixelPosition < 213+10+142+426 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+426 && XPixelPosition < 213+20+142+426 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+426 && XPixelPosition < 213+30+142+426 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[28:26] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+20+426  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+50+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+30+426 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[28:26] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+426 && XPixelPosition < 355+40+426  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+25+426 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+426 && XPixelPosition < 355+30+426 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+45+426 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+426 && XPixelPosition < 355+50+426 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[28:26] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+426 && XPixelPosition < 497-30-142+426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+426 && XPixelPosition < 497-10-142+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,6
+		if(BOARD[30] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[34] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[33:31] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[33:31] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[33:31] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[33:31] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[33:31] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+284+426 && XPixelPosition < 213+284+426 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+284+426 && XPixelPosition < 213+10+284+426 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+284+426 && XPixelPosition < 213+20+284+426 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+284+426 && XPixelPosition < 213+30+284+426 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[33:31] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+20+568  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+50+568 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+30+568 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[33:31] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+568 && XPixelPosition < 355+40+568  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+25+568 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+568 && XPixelPosition < 355+30+568 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+45+568 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+568 && XPixelPosition < 355+50+568 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[33:31] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+568 && XPixelPosition < 497-30-142+568 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+568 && XPixelPosition < 497-10-142+568 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 30 && YPixelPosition < 236) begin //0,7
+		if(BOARD[35] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[39] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[38:36] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[38:36] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[38:36] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[38:36] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 384-5-256 && YPixelPosition < 384+5-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[38:36] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-65 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+426+426 && XPixelPosition < 213+426+426 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+426+426 && XPixelPosition < 213+10+426+426 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+426+426 && XPixelPosition < 213+20+426+426 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+426+426 && XPixelPosition < 213+30+426+426 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[38:36] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710  && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+20+710  && YPixelPosition > 128-75 && YPixelPosition < 128-65)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+50+710 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+30+710 && YPixelPosition > 128-75 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+10 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[38:36] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710 && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384-75-256 && YPixelPosition < 384-65-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384+60-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+710 && XPixelPosition < 355+40+710  && YPixelPosition > 384-75-256 && YPixelPosition < 384+70-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+25+710 && YPixelPosition > 384+50-256 && YPixelPosition < 384+55-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+710 && XPixelPosition < 355+30+710 && YPixelPosition > 384+55-256 && YPixelPosition < 384+60-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+45+710 && YPixelPosition > 384+70-256 && YPixelPosition < 384+75-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+710 && XPixelPosition < 355+50+710 && YPixelPosition > 384+75-256 && YPixelPosition < 384+80-256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[38:36] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+710 && XPixelPosition < 497-30-142+710 && YPixelPosition > 128-75 && YPixelPosition < 128+70)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+710 && XPixelPosition < 497-10-142+710 && YPixelPosition > 128 && YPixelPosition < 128+10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128-10 && YPixelPosition < 128)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128-20 && YPixelPosition < 128-10)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128-30 && YPixelPosition < 128-20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128-40 && YPixelPosition < 128-30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128-50 && YPixelPosition < 128-40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128-60 && YPixelPosition < 128-50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128+10 && YPixelPosition < 128+20)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128+20 && YPixelPosition < 128+30)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128+30 && YPixelPosition < 128+40)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128+40 && YPixelPosition < 128+50)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128+50 && YPixelPosition < 128+60)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128+60 && YPixelPosition < 128+70)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	
+	//row1
+	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,0
+		if(BOARD[40] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[44] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[43:41] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[43:41] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40 && XPixelPosition < 71+50 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[43:41] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[43:41] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40-142 && XPixelPosition < 213+40-142 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[43:41] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10-142 && XPixelPosition < 213-142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-142 && XPixelPosition < 213+10-142 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10-142 && XPixelPosition < 213+20-142 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20-142 && XPixelPosition < 213+30-142 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30-142 && XPixelPosition < 213+40-142 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[43:41] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+20-284 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+30-284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[43:41] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+25-284 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-284 && XPixelPosition < 355+30-284 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+45-284 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-284 && XPixelPosition < 355+50-284 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[43:41] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-426 && XPixelPosition < 497-30-426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-426 && XPixelPosition < 497-10-426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,1
+		if(BOARD[45] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[49] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[48:46] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[48:46] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[48:46] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[48:46] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40 && XPixelPosition < 213+40  && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40 && XPixelPosition < 213-30  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[48:46] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40  && XPixelPosition < 213-30  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30 && XPixelPosition < 213+50  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30  && XPixelPosition < 213+50  && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10 && XPixelPosition < 213  && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213  && XPixelPosition < 213+10  && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10  && XPixelPosition < 213+20  && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20  && XPixelPosition < 213+30  && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30  && XPixelPosition < 213+40  && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[48:46] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+20-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+30-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[48:46] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+25-142 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-142 && XPixelPosition < 355+30-142 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+45-142 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-142 && XPixelPosition < 355+50-142 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[48:46] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-284 && XPixelPosition < 497-30-284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-284 && XPixelPosition < 497-10-284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,2
+		if(BOARD[50] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[54] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[53:51] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[53:51] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[53:51] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[53:51] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142 && XPixelPosition < 213+40+142 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[53:51] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142 && XPixelPosition < 213+142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142 && XPixelPosition < 213+10+142 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142 && XPixelPosition < 213+20+142 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142 && XPixelPosition < 213+30+142 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142 && XPixelPosition < 213+40+142 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[53:51] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+20  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+50 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+30 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40 && XPixelPosition < 355+50 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+50 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[53:51] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30 && XPixelPosition < 355+40  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+25 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25 && XPixelPosition < 355+30 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+45 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45 && XPixelPosition < 355+50 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[53:51] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142 && XPixelPosition < 497-30-142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142 && XPixelPosition < 497-10-142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,3
+		if(BOARD[55] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[59] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[58:56] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[58:56] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[58:56] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[58:56] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[58:56] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+142 && XPixelPosition < 213+142+142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+142 && XPixelPosition < 213+10+142+142 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+142 && XPixelPosition < 213+20+142+142 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+142 && XPixelPosition < 213+30+142+142 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[58:56] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+20+142  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+50+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+30+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[58:56] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+142 && XPixelPosition < 355+40+142  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+25+142 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+142 && XPixelPosition < 355+30+142 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+45+142 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+142 && XPixelPosition < 355+50+142 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[58:56] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+142 && XPixelPosition < 497-30-142+142 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+142 && XPixelPosition < 497-10-142+142 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,4
+		if(BOARD[60] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[64] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[63:61] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[63:61] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[63:61] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[63:61] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[63:61] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+284 && XPixelPosition < 213+142+284 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+284 && XPixelPosition < 213+10+142+284 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+284 && XPixelPosition < 213+20+142+284 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+284 && XPixelPosition < 213+30+142+284 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[63:61] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+20+284  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+50+284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+30+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[63:61] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+284 && XPixelPosition < 355+40+284  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+25+284 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+284 && XPixelPosition < 355+30+284 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+45+284 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+284 && XPixelPosition < 355+50+284 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[63:61] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+284 && XPixelPosition < 497-30-142+284 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+284 && XPixelPosition < 497-10-142+284 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,5
+		if(BOARD[65] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[69] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[68:66] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[68:66] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[68:66] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[68:66] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[68:66] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+426 && XPixelPosition < 213+142+426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+426 && XPixelPosition < 213+10+142+426 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+426 && XPixelPosition < 213+20+142+426 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+426 && XPixelPosition < 213+30+142+426 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[68:66] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+20+426  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+50+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+30+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[68:66] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+426 && XPixelPosition < 355+40+426  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+25+426 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+426 && XPixelPosition < 355+30+426 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+45+426 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+426 && XPixelPosition < 355+50+426 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[68:66] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+426 && XPixelPosition < 497-30-142+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+426 && XPixelPosition < 497-10-142+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,6
+		if(BOARD[70] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[74] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[73:71] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[73:71] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[73:71] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[73:71] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[73:71] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+284+426 && XPixelPosition < 213+284+426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+284+426 && XPixelPosition < 213+10+284+426 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+284+426 && XPixelPosition < 213+20+284+426 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+284+426 && XPixelPosition < 213+30+284+426 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[73:71] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+20+568  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+50+568 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+30+568 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[73:71] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+568 && XPixelPosition < 355+40+568  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+25+568 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+568 && XPixelPosition < 355+30+568 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+45+568 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+568 && XPixelPosition < 355+50+568 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[73:71] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+568 && XPixelPosition < 497-30-142+568 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+568 && XPixelPosition < 497-10-142+568 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 286 && YPixelPosition < 492) begin //1,7
+		if(BOARD[75] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[79] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[78:76] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[78:76] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[78:76] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[78:76] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 384-5-256+256 && YPixelPosition < 384+5-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[78:76] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-65+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+426+426 && XPixelPosition < 213+426+426 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+426+426 && XPixelPosition < 213+10+426+426 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+426+426 && XPixelPosition < 213+20+426+426 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+426+426 && XPixelPosition < 213+30+426+426 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[78:76] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710  && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+20+710  && YPixelPosition > 128-75+256 && YPixelPosition < 128-65+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+50+710 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+30+710 && YPixelPosition > 128-75+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+10+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[78:76] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384-75-256+256 && YPixelPosition < 384-65-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384+60-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+710 && XPixelPosition < 355+40+710  && YPixelPosition > 384-75-256+256 && YPixelPosition < 384+70-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+25+710 && YPixelPosition > 384+50-256+256 && YPixelPosition < 384+55-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+710 && XPixelPosition < 355+30+710 && YPixelPosition > 384+55-256+256 && YPixelPosition < 384+60-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+45+710 && YPixelPosition > 384+70-256+256 && YPixelPosition < 384+75-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+710 && XPixelPosition < 355+50+710 && YPixelPosition > 384+75-256+256 && YPixelPosition < 384+80-256+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[78:76] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+710 && XPixelPosition < 497-30-142+710 && YPixelPosition > 128-75+256 && YPixelPosition < 128+70+256)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+710 && XPixelPosition < 497-10-142+710 && YPixelPosition > 128+256 && YPixelPosition < 128+10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128-10+256 && YPixelPosition < 128+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128-20+256 && YPixelPosition < 128-10+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128-30+256 && YPixelPosition < 128-20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128-40+256 && YPixelPosition < 128-30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128-50+256 && YPixelPosition < 128-40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128-60+256 && YPixelPosition < 128-50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128+10+256 && YPixelPosition < 128+20+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128+20+256 && YPixelPosition < 128+30+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128+30+256 && YPixelPosition < 128+40+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128+40+256 && YPixelPosition < 128+50+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128+50+256 && YPixelPosition < 128+60+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128+60+256 && YPixelPosition < 128+70+256)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	
+	//row2
+	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,0
+		if(BOARD[80] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[84] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[83:81] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[83:81] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 128-75+512 && YPixelPosition < 128+70+512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128-75+512 && YPixelPosition < 128-65+512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128+512 && YPixelPosition < 128+10+ 512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40 && XPixelPosition < 71+50 && YPixelPosition > 128-65+ 512 && YPixelPosition < 128+10+ 512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[83:81] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 384-75-256+ 512 && YPixelPosition < 384+70-256+ 512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384-75-256+ 512 && YPixelPosition < 384-65-256+ 512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384+60-256+ 512 && YPixelPosition < 384+70-256+ 512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[83:81] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40-142 && XPixelPosition < 213+40-142 && YPixelPosition > 384-5-256+ 512 && YPixelPosition < 384+5-256+ 512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 384-75-256+ 512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[83:81] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10-142 && XPixelPosition < 213-142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-142 && XPixelPosition < 213+10-142 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10-142 && XPixelPosition < 213+20-142 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20-142 && XPixelPosition < 213+30-142 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30-142 && XPixelPosition < 213+40-142 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[83:81] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+20-284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+30-284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[83:81] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+25-284 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-284 && XPixelPosition < 355+30-284 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+45-284 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-284 && XPixelPosition < 355+50-284 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[83:81] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-426 && XPixelPosition < 497-30-426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-426 && XPixelPosition < 497-10-426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,1
+		if(BOARD[85] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[89] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[88:86] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[88:86] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[88:86] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[88:86] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40 && XPixelPosition < 213+40  && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40 && XPixelPosition < 213-30  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[88:86] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40  && XPixelPosition < 213-30  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30 && XPixelPosition < 213+50  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30  && XPixelPosition < 213+50  && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10 && XPixelPosition < 213  && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213  && XPixelPosition < 213+10  && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10  && XPixelPosition < 213+20  && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20  && XPixelPosition < 213+30  && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30  && XPixelPosition < 213+40  && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[88:86] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+20-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+30-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[88:86] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+25-142 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-142 && XPixelPosition < 355+30-142 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+45-142 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-142 && XPixelPosition < 355+50-142 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[88:86] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-284 && XPixelPosition < 497-30-284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-284 && XPixelPosition < 497-10-284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 314 && XPixelPosition < 406 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,2
+		if(BOARD[90] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[94] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[93:91] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[93:91] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[93:91] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[93:91] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142 && XPixelPosition < 213+40+142 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[93:91] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142 && XPixelPosition < 213+142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142 && XPixelPosition < 213+10+142 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142 && XPixelPosition < 213+20+142 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142 && XPixelPosition < 213+30+142 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142 && XPixelPosition < 213+40+142 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[93:91] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+20  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+50 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+30 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40 && XPixelPosition < 355+50 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+50 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[93:91] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30 && XPixelPosition < 355+40  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+25 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25 && XPixelPosition < 355+30 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+45 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45 && XPixelPosition < 355+50 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[93:91] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142 && XPixelPosition < 497-30-142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142 && XPixelPosition < 497-10-142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,3
+		if(BOARD[95] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[99] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[98:96] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[98:96] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[98:96] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[98:96] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[98:96] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+142 && XPixelPosition < 213+142+142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+142 && XPixelPosition < 213+10+142+142 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+142 && XPixelPosition < 213+20+142+142 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+142 && XPixelPosition < 213+30+142+142 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[98:96] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+20+142  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+50+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+30+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[98:96] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+142 && XPixelPosition < 355+40+142  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+25+142 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+142 && XPixelPosition < 355+30+142 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+45+142 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+142 && XPixelPosition < 355+50+142 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[98:96] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+142 && XPixelPosition < 497-30-142+142 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+142 && XPixelPosition < 497-10-142+142 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,4
+		if(BOARD[100] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[104] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[103:101] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[103:101] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[103:101] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[103:101] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[103:101] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+284 && XPixelPosition < 213+142+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+284 && XPixelPosition < 213+10+142+284 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+284 && XPixelPosition < 213+20+142+284 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+284 && XPixelPosition < 213+30+142+284 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[103:101] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+20+284  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+50+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+30+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[103:101] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+284 && XPixelPosition < 355+40+284  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+25+284 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+284 && XPixelPosition < 355+30+284 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+45+284 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+284 && XPixelPosition < 355+50+284 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[103:101] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+284 && XPixelPosition < 497-30-142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+284 && XPixelPosition < 497-10-142+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,5
+		if(BOARD[105] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[109] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[108:106] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[108:106] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[108:106] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[108:106] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[108:106] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+426 && XPixelPosition < 213+142+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+426 && XPixelPosition < 213+10+142+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+426 && XPixelPosition < 213+20+142+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+426 && XPixelPosition < 213+30+142+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[108:106] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+20+426  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+50+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+30+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[108:106] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+426 && XPixelPosition < 355+40+426  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+25+426 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+426 && XPixelPosition < 355+30+426 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+45+426 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+426 && XPixelPosition < 355+50+426 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[108:106] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+426 && XPixelPosition < 497-30-142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+426 && XPixelPosition < 497-10-142+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,6
+		if(BOARD[110] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[114] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[113:111] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[113:111] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[113:111] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[113:111] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[113:111] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+284+426 && XPixelPosition < 213+284+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+284+426 && XPixelPosition < 213+10+284+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+284+426 && XPixelPosition < 213+20+284+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+284+426 && XPixelPosition < 213+30+284+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[113:111] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+20+568  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+50+568 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+30+568 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[113:111] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+568 && XPixelPosition < 355+40+568  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+25+568 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+568 && XPixelPosition < 355+30+568 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+45+568 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+568 && XPixelPosition < 355+50+568 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[113:111] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+568 && XPixelPosition < 497-30-142+568 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+568 && XPixelPosition < 497-10-142+568 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 542 && YPixelPosition < 748) begin //2,7
+		if(BOARD[115] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[119] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[118:116] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[118:116] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[118:116] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[118:116] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[118:116] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+426+426 && XPixelPosition < 213+426+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+426+426 && XPixelPosition < 213+10+426+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+426+426 && XPixelPosition < 213+20+426+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+426+426 && XPixelPosition < 213+30+426+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[118:116] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+20+710  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+50+710 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+30+710 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[118:116] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+710 && XPixelPosition < 355+40+710  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+25+710 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+710 && XPixelPosition < 355+30+710 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+45+710 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+710 && XPixelPosition < 355+50+710 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[118:116] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+710 && XPixelPosition < 497-30-142+710 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+710 && XPixelPosition < 497-10-142+710 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	
+	//row3
+	else if(XPixelPosition > 30 && XPixelPosition < 122 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,0
+		if(BOARD[120] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[124] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[123:121] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[123:121] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 128-75 +768 && YPixelPosition < 128+70 +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128-75 +768 && YPixelPosition < 128-65 +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+50 && YPixelPosition > 128 +768 && YPixelPosition < 128+10 +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40 && XPixelPosition < 71+50 && YPixelPosition > 128-65 +768 && YPixelPosition < 128+10 +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[123:121] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40 && XPixelPosition < 71-30 && YPixelPosition > 384-75-256 +768 && YPixelPosition < 384+70-256 +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384-75-256 +768 && YPixelPosition < 384-65-256 +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30 && XPixelPosition < 71+45 && YPixelPosition > 384+60-256 +768 && YPixelPosition < 384+70-256 +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[123:121] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40-142 && XPixelPosition < 213+40-142 && YPixelPosition > 384-5-256 +768 && YPixelPosition < 384+5-256 +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 384-75-256 +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[123:121] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40-142 && XPixelPosition < 213-30-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10-142 && XPixelPosition < 213-142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-142 && XPixelPosition < 213+10-142 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10-142 && XPixelPosition < 213+20-142 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20-142 && XPixelPosition < 213+30-142 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30-142 && XPixelPosition < 213+40-142 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40-142 && XPixelPosition < 213+50-142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[123:121] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+20-284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+30-284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+50-284 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[123:121] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-284 && XPixelPosition < 355-30-284 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-284 && XPixelPosition < 355+40-284 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-284 && XPixelPosition < 355+25-284 && YPixelPosition > 384+50-256  +768 && YPixelPosition < 384+55-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-284 && XPixelPosition < 355+30-284 && YPixelPosition > 384+55-256  +768 && YPixelPosition < 384+60-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-284 && XPixelPosition < 355+45-284 && YPixelPosition > 384+70-256  +768 && YPixelPosition < 384+75-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-284 && XPixelPosition < 355+50-284 && YPixelPosition > 384+75-256  +768 && YPixelPosition < 384+80-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[123:121] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-426 && XPixelPosition < 497-30-426 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-426 && XPixelPosition < 497-10-426 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128-10  +768 && YPixelPosition < 128  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128-20  +768 && YPixelPosition < 128-10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128-30  +768 && YPixelPosition < 128-20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128-40  +768 && YPixelPosition < 128-30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128-50  +768 && YPixelPosition < 128-40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128-60  +768 && YPixelPosition < 128-50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-426 && XPixelPosition < 497-426 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-426 && XPixelPosition < 497+10-426 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-426 && XPixelPosition < 497+20-426 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-426 && XPixelPosition < 497+30-426 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-426 && XPixelPosition < 497+40-426 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-426 && XPixelPosition < 497+50-426 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 172 && XPixelPosition < 264 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,1
+		if(BOARD[125] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[129] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[128:126] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[128:126] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+142 && XPixelPosition < 71+50+142 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[128:126] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+142 && XPixelPosition < 71-30+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+142 && XPixelPosition < 71+45+142 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[128:126] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40 && XPixelPosition < 213+40  && YPixelPosition > 384-5-256  +768 && YPixelPosition < 384+5-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40 && XPixelPosition < 213-30  && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[128:126] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40  && XPixelPosition < 213-30  && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30 && XPixelPosition < 213+50  && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30  && XPixelPosition < 213+50  && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10 && XPixelPosition < 213  && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213  && XPixelPosition < 213+10  && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10  && XPixelPosition < 213+20  && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20  && XPixelPosition < 213+30  && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30  && XPixelPosition < 213+40  && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40  && XPixelPosition < 213+50  && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[128:126] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+20-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+30-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+50-142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[128:126] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40-142 && XPixelPosition < 355-30-142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30-142 && XPixelPosition < 355+40-142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20-142 && XPixelPosition < 355+25-142 && YPixelPosition > 384+50-256  +768 && YPixelPosition < 384+55-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25-142 && XPixelPosition < 355+30-142 && YPixelPosition > 384+55-256  +768 && YPixelPosition < 384+60-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40-142 && XPixelPosition < 355+45-142 && YPixelPosition > 384+70-256  +768 && YPixelPosition < 384+75-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45-142 && XPixelPosition < 355+50-142 && YPixelPosition > 384+75-256  +768 && YPixelPosition < 384+80-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[128:126] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-284 && XPixelPosition < 497-30-284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-284 && XPixelPosition < 497-10-284 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128-10  +768 && YPixelPosition < 128  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128-20  +768 && YPixelPosition < 128-10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128-30  +768 && YPixelPosition < 128-20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128-40  +768 && YPixelPosition < 128-30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128-50  +768 && YPixelPosition < 128-40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128-60  +768 && YPixelPosition < 128-50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-284 && XPixelPosition < 497-284 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-284 && XPixelPosition < 497+10-284 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-284 && XPixelPosition < 497+20-284 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-284 && XPixelPosition < 497+30-284 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-284 && XPixelPosition < 497+40-284 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-284 && XPixelPosition < 497+50-284 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 314 && XPixelPosition < 406 && YPixelPosition > 798 && YPixelPosition < 994) begin //3,2
+		if(BOARD[130] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[134] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[133:131] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[133:131] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284 && XPixelPosition < 71+50+284 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[133:131] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284 && XPixelPosition < 71-30+284 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284 && XPixelPosition < 71+45+284 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[133:131] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142 && XPixelPosition < 213+40+142 && YPixelPosition > 384-5-256  +768 && YPixelPosition < 384+5-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[133:131] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142 && XPixelPosition < 213-30+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142 && XPixelPosition < 213+142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142 && XPixelPosition < 213+10+142 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142 && XPixelPosition < 213+20+142 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142 && XPixelPosition < 213+30+142 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142 && XPixelPosition < 213+40+142 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142 && XPixelPosition < 213+50+142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[133:131] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30  && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+20  && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30  && XPixelPosition < 355+50 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+30 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40 && XPixelPosition < 355+50 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+50 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[133:131] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40 && XPixelPosition < 355-30 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30 && XPixelPosition < 355+40 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30 && XPixelPosition < 355+40  && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20 && XPixelPosition < 355+25 && YPixelPosition > 384+50-256  +768 && YPixelPosition < 384+55-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25 && XPixelPosition < 355+30 && YPixelPosition > 384+55-256  +768 && YPixelPosition < 384+60-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40 && XPixelPosition < 355+45 && YPixelPosition > 384+70-256  +768 && YPixelPosition < 384+75-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45 && XPixelPosition < 355+50 && YPixelPosition > 384+75-256  +768 && YPixelPosition < 384+80-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[133:131] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142 && XPixelPosition < 497-30-142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142 && XPixelPosition < 497-10-142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128-10  +768 && YPixelPosition < 128  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128-20  +768 && YPixelPosition < 128-10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128-30  +768 && YPixelPosition < 128-20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128-40  +768 && YPixelPosition < 128-30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128-50  +768 && YPixelPosition < 128-40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128-60  +768 && YPixelPosition < 128-50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142 && XPixelPosition < 497-142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142 && XPixelPosition < 497+10-142 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142 && XPixelPosition < 497+20-142 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142 && XPixelPosition < 497+30-142 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142 && XPixelPosition < 497+40-142 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142 && XPixelPosition < 497+50-142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 456 && XPixelPosition < 548 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,3
+		if(BOARD[135] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[139] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[138:136] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[138:136] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+142 && XPixelPosition < 71+50+284+142 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[138:136] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+142 && XPixelPosition < 71-30+284+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+142 && XPixelPosition < 71+45+284+142 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[138:136] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 384-5-256  +768 && YPixelPosition < 384+5-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[138:136] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+142 && XPixelPosition < 213-30+142+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+142 && XPixelPosition < 213+142+142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+142 && XPixelPosition < 213+10+142+142 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+142 && XPixelPosition < 213+20+142+142 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+142 && XPixelPosition < 213+30+142+142 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+142 && XPixelPosition < 213+40+142+142 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+142 && XPixelPosition < 213+50+142+142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[138:136] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142  && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+20+142  && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142  && XPixelPosition < 355+50+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+30+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+50+142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[138:136] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+142 && XPixelPosition < 355-30+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+142 && XPixelPosition < 355+40+142 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+142 && XPixelPosition < 355+40+142  && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+142 && XPixelPosition < 355+25+142 && YPixelPosition > 384+50-256  +768 && YPixelPosition < 384+55-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+142 && XPixelPosition < 355+30+142 && YPixelPosition > 384+55-256  +768 && YPixelPosition < 384+60-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+142 && XPixelPosition < 355+45+142 && YPixelPosition > 384+70-256  +768 && YPixelPosition < 384+75-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+142 && XPixelPosition < 355+50+142 && YPixelPosition > 384+75-256  +768 && YPixelPosition < 384+80-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[138:136] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+142 && XPixelPosition < 497-30-142+142 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+142 && XPixelPosition < 497-10-142+142 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128-10  +768 && YPixelPosition < 128  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128-20  +768 && YPixelPosition < 128-10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128-30  +768 && YPixelPosition < 128-20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128-40  +768 && YPixelPosition < 128-30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128-50  +768 && YPixelPosition < 128-40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128-60  +768 && YPixelPosition < 128-50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+142 && XPixelPosition < 497-142+142 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+142 && XPixelPosition < 497+10-142+142 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+142 && XPixelPosition < 497+20-142+142 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+142 && XPixelPosition < 497+30-142+142 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+142 && XPixelPosition < 497+40-142+142 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+142 && XPixelPosition < 497+50-142+142 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 598 && XPixelPosition < 690 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,4
+		if(BOARD[140] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[144] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[143:141] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[143:141] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+284 && XPixelPosition < 71+50+284+284 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[143:141] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+284 && XPixelPosition < 71-30+284+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+284 && XPixelPosition < 71+45+284+284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[143:141] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[143:141] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+284 && XPixelPosition < 213-30+142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+284 && XPixelPosition < 213+142+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+284 && XPixelPosition < 213+10+142+284 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+284 && XPixelPosition < 213+20+142+284 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+284 && XPixelPosition < 213+30+142+284 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+284 && XPixelPosition < 213+40+142+284 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+284 && XPixelPosition < 213+50+142+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[143:141] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+20+284  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284  && XPixelPosition < 355+50+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+30+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+50+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[143:141] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+284 && XPixelPosition < 355-30+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+284 && XPixelPosition < 355+40+284 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+284 && XPixelPosition < 355+40+284  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+284 && XPixelPosition < 355+25+284 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+284 && XPixelPosition < 355+30+284 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+284 && XPixelPosition < 355+45+284 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+284 && XPixelPosition < 355+50+284 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[143:141] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+284 && XPixelPosition < 497-30-142+284 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+284 && XPixelPosition < 497-10-142+284 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+284 && XPixelPosition < 497-142+284 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+284 && XPixelPosition < 497+10-142+284 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+284 && XPixelPosition < 497+20-142+284 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+284 && XPixelPosition < 497+30-142+284 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+284 && XPixelPosition < 497+40-142+284 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+284 && XPixelPosition < 497+50-142+284 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 740 && XPixelPosition < 832 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,5
+		if(BOARD[145] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[149] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[148:146] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[148:146] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+284+426 && XPixelPosition < 71+50+284+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[148:146] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+284+426 && XPixelPosition < 71-30+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+284+426 && XPixelPosition < 71+45+284+426 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[148:146] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[148:146] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+142+426 && XPixelPosition < 213-30+142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+142+426 && XPixelPosition < 213+142+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+142+426 && XPixelPosition < 213+10+142+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+142+426 && XPixelPosition < 213+20+142+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+142+426 && XPixelPosition < 213+30+142+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+142+426 && XPixelPosition < 213+40+142+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+142+426 && XPixelPosition < 213+50+142+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[148:146] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+20+426  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426  && XPixelPosition < 355+50+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+30+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+50+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[148:146] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+426 && XPixelPosition < 355-30+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+426 && XPixelPosition < 355+40+426 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+426 && XPixelPosition < 355+40+426  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+426 && XPixelPosition < 355+25+426 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+426 && XPixelPosition < 355+30+426 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+426 && XPixelPosition < 355+45+426 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+426 && XPixelPosition < 355+50+426 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[148:146] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+426 && XPixelPosition < 497-30-142+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+426 && XPixelPosition < 497-10-142+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+426 && XPixelPosition < 497-142+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+426 && XPixelPosition < 497+10-142+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+426 && XPixelPosition < 497+20-142+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+426 && XPixelPosition < 497+30-142+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+426 && XPixelPosition < 497+40-142+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+426 && XPixelPosition < 497+50-142+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 882 && XPixelPosition < 974 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,6
+		if(BOARD[150] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[154] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[153:151] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[153:151] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+852 && XPixelPosition < 71+50+852 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[153:151] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+852 && XPixelPosition < 71-30+852 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+852 && XPixelPosition < 71+45+852 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[153:151] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 384-5-256 +512 && YPixelPosition < 384+5-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[153:151] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+284+426 && XPixelPosition < 213-30+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128-65 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+284+426 && XPixelPosition < 213+284+426 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+284+426 && XPixelPosition < 213+10+284+426 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+284+426 && XPixelPosition < 213+20+284+426 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+284+426 && XPixelPosition < 213+30+284+426 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+284+426 && XPixelPosition < 213+40+284+426 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+284+426 && XPixelPosition < 213+50+284+426 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[153:151] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568  && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+20+568  && YPixelPosition > 128-75 +512 && YPixelPosition < 128-65 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568  && XPixelPosition < 355+50+568 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+30+568 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+50+568 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[153:151] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+568 && XPixelPosition < 355-30+568 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384-65-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+568 && XPixelPosition < 355+40+568 && YPixelPosition > 384+60-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+568 && XPixelPosition < 355+40+568  && YPixelPosition > 384-75-256 +512 && YPixelPosition < 384+70-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+568 && XPixelPosition < 355+25+568 && YPixelPosition > 384+50-256 +512 && YPixelPosition < 384+55-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+568 && XPixelPosition < 355+30+568 && YPixelPosition > 384+55-256 +512 && YPixelPosition < 384+60-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+568 && XPixelPosition < 355+45+568 && YPixelPosition > 384+70-256 +512 && YPixelPosition < 384+75-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+568 && XPixelPosition < 355+50+568 && YPixelPosition > 384+75-256 +512 && YPixelPosition < 384+80-256 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[153:151] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+568 && XPixelPosition < 497-30-142+568 && YPixelPosition > 128-75 +512 && YPixelPosition < 128+70 +512)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+568 && XPixelPosition < 497-10-142+568 && YPixelPosition > 128 +512 && YPixelPosition < 128+10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128-10 +512 && YPixelPosition < 128 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128-20 +512 && YPixelPosition < 128-10 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128-30 +512 && YPixelPosition < 128-20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128-40 +512 && YPixelPosition < 128-30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128-50 +512 && YPixelPosition < 128-40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128-60 +512 && YPixelPosition < 128-50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+568 && XPixelPosition < 497-142+568 && YPixelPosition > 128+10 +512 && YPixelPosition < 128+20 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+568 && XPixelPosition < 497+10-142+568 && YPixelPosition > 128+20 +512 && YPixelPosition < 128+30 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+568 && XPixelPosition < 497+20-142+568 && YPixelPosition > 128+30 +512 && YPixelPosition < 128+40 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+568 && XPixelPosition < 497+30-142+568 && YPixelPosition > 128+40 +512 && YPixelPosition < 128+50 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+568 && XPixelPosition < 497+40-142+568 && YPixelPosition > 128+50 +512 && YPixelPosition < 128+60 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+568 && XPixelPosition < 497+50-142+568 && YPixelPosition > 128+60 +512 && YPixelPosition < 128+70 +512)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
+	else if(XPixelPosition > 1024 && XPixelPosition < 1116 &&  YPixelPosition > 798 && YPixelPosition < 994) begin //3,7
+		if(BOARD[155] == COLOR_RED) begin
+			//set colour red
+		end
+		else begin
+			//set colour blue
+		end
+		
+		if(BOARD[159] == STATE_COVERED)begin
+			//draw WHITE
+			redValue <= 8'b11111111;
+			blueValue <= 8'b11111111;
+			greenValue <= 8'b11111111;
+		end
+		else if(BOARD[158:156] == PIECE_NONE)begin
+			//draw black
+		end
+		else if(BOARD[158:156] == PIECE_PAWN)begin //begin draw pawn
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71+40+994 && XPixelPosition < 71+50+994 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw pawn
+		else if(BOARD[158:156] == PIECE_CANNON)begin // begin draw canon
+			if (XPixelPosition > 71-40+994 && XPixelPosition < 71-30+994 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 71-30+994 && XPixelPosition < 71+45+994 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw canon
+		else if(BOARD[158:156] == PIECE_KNIGHT)begin //begin draw knight
+			if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 384-5-256  +768 && YPixelPosition < 384+5-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end // end draw knight
+		else if(BOARD[158:156] == PIECE_ROOK)begin //begin draw rook
+			if (XPixelPosition > 213-40+426+426 && XPixelPosition < 213-30+426+426 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-30+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128-65  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213-10+426+426 && XPixelPosition < 213+426+426 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+426+426 && XPixelPosition < 213+10+426+426 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+10+426+426 && XPixelPosition < 213+20+426+426 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+20+426+426 && XPixelPosition < 213+30+426+426 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+30+426+426 && XPixelPosition < 213+40+426+426 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 213+40+426+426 && XPixelPosition < 213+50+426+426 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw rook
+		else if(BOARD[158:156] == PIECE_BISHOP) begin //begin draw bishop
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710  && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+20+710  && YPixelPosition > 128-75  +768 && YPixelPosition < 128-65  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710  && XPixelPosition < 355+50+710 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+30+710 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+50+710 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+70  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end// end draw bishop
+		else if(BOARD[158:156] == PIECE_QUEEN) begin //begin draw queen
+			if (XPixelPosition > 355-40+710 && XPixelPosition < 355-30+710 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384-65-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355-30+710 && XPixelPosition < 355+40+710 && YPixelPosition > 384+60-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+30+710 && XPixelPosition < 355+40+710  && YPixelPosition > 384-75-256  +768 && YPixelPosition < 384+70-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			
+			else if(XPixelPosition > 355+20+710 && XPixelPosition < 355+25+710 && YPixelPosition > 384+50-256  +768 && YPixelPosition < 384+55-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+25+710 && XPixelPosition < 355+30+710 && YPixelPosition > 384+55-256  +768 && YPixelPosition < 384+60-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 355+40+710 && XPixelPosition < 355+45+710 && YPixelPosition > 384+70-256  +768 && YPixelPosition < 384+75-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;		
+			end
+			else if(XPixelPosition > 355+45+710 && XPixelPosition < 355+50+710 && YPixelPosition > 384+75-256  +768 && YPixelPosition < 384+80-256  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw queen
+		else if(BOARD[158:156] == PIECE_KING) begin
+
+			if (XPixelPosition > 497-40-142+710 && XPixelPosition < 497-30-142+710 && YPixelPosition > 128-75  +768 && YPixelPosition < 128+70  +768)begin
+				redValue <= 8'b00000000;
+				blueValue <= 8'b11111111;
+				greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-30-142+710 && XPixelPosition < 497-10-142+710 && YPixelPosition > 128  +768 && YPixelPosition < 128+10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128-10  +768 && YPixelPosition < 128  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128-20  +768 && YPixelPosition < 128-10  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128-30  +768 && YPixelPosition < 128-20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128-40  +768 && YPixelPosition < 128-30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128-50  +768 && YPixelPosition < 128-40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128-60  +768 && YPixelPosition < 128-50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-10-142+710 && XPixelPosition < 497-142+710 && YPixelPosition > 128+10  +768 && YPixelPosition < 128+20  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497-142+710 && XPixelPosition < 497+10-142+710 && YPixelPosition > 128+20  +768 && YPixelPosition < 128+30  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+10-142+710 && XPixelPosition < 497+20-142+710 && YPixelPosition > 128+30  +768 && YPixelPosition < 128+40  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+20-142+710 && XPixelPosition < 497+30-142+710 && YPixelPosition > 128+40  +768 && YPixelPosition < 128+50  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+30-142+710 && XPixelPosition < 497+40-142+710 && YPixelPosition > 128+50  +768 && YPixelPosition < 128+60  +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else if(XPixelPosition > 497+40-142+710 && XPixelPosition < 497+50-142+710 && YPixelPosition > 128+60  +768 && YPixelPosition < 128+70 +768)begin
+					redValue <= 8'b00000000;
+					blueValue <= 8'b11111111;
+					greenValue <= 8'b11111111;
+			end
+			else begin 
+					redValue <= 8'b00000000;
+					blueValue <= 8'b00000000;
+					greenValue <= 8'b00000000;
+			end
+		end //end draw king
+	end
 	
 	else begin
 			redValue <= 8'b00000000;
@@ -1885,4 +10590,3 @@ module VGAFrequency (
 		altpll_component.port_extclk3 = "PORT_UNUSED",
 		altpll_component.width_clock = 5;
 endmodule
-
