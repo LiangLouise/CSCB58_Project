@@ -86,30 +86,29 @@ localparam INITIAL = 3'b000,
 output reg[2:0] state;
 assign hilite_selected_square = (state == PIECE_MOVE);
 
-/* State Machine NSL and OFL */
+/* State Machine */
 always @ (posedge CLK, posedge RESET) begin
-    if (RESET) begin
-        // initialization code here
+    if (RESET == 1'b1) begin
         state <= INITIAL;
-        player_to_move <= COLOR_RED;
-        
-        cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
-        selected_addr <= 5'bXXXXX;
-
-        board_out_addr <= 5'b00_000;
-        board_out_piece <= 5'b0_000_0;
-        board_change_enable <= 0;
-	
     end
     else begin
         // State machine code from herPIECE_NONEe
         case (state)
             INITIAL :
+            // Start the game by pressing the KeyC
             begin
-                // State Transitions
-                state <= PIECE_SEL; // unconditional
+            player_to_move <= COLOR_RED;
+        
+            cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
+            selected_addr <= 5'bXXXXX;
 
-                // RTL operations
+            board_out_addr <= 5'b00_000;
+            board_out_piece <= 5'b0_000_0;
+            board_change_enable <= 0;
+            if (keyC)
+                begin
+                    state <= PIECE_SEL;
+                end
             end
 				
 				
@@ -130,11 +129,10 @@ always @ (posedge CLK, posedge RESET) begin
                     && cursor_contents[3:1] != PIECE_NONE) 
 						begin
                             // flip the chess
-                            if (cursor_contents[0:0] == STATE_COVERED)
+                            if (cursor_contents[0] == STATE_COVERED)
                                 begin
                                 state <= FLIP_CHESS;
-										  end
-
+								end
                             else begin
                                 state <= PIECE_MOVE;
                             end
@@ -169,15 +167,6 @@ always @ (posedge CLK, posedge RESET) begin
                         end
 
                     end
-                    // else if (cursor_contents[3] == player_to_move
-                    //     && cursor_contents[2:0] != PIECE_NONE)
-                    // begin
-                    //     // they clicked their own piece
-                    //     selected_addr <= cursor_addr;
-                    // end
-					// 	  else begin
-					// 			state <= PIECE_SEL;
-					// 	  end
                 end
             end
 
@@ -221,24 +210,6 @@ always @ (posedge CLK, posedge RESET) begin
 			cursor_addr <= cursor_addr + 5'b01_000; // Down Move, not allowed when y == 3
 	end
 end
-
-
-	
-/* Combinational logic to 1;determine if the selected piece can move as desired */
-// really only valid when 1;in PIECE_MOVE state
-// selected_contents is th1;e piece we're trying to move
-// selected_addr is the old location
-// cursor_addr is the destination square
-
-// cursor addr and selected addr are 6 bit numbers. 5:3 reps the row, 2:0 reps the col
-
-// always @(*) begin
-// 	if (cursor_addr[2:0] >= selected_addr[2:0]) h_delta = cursor_addr[2:0] - selected_addr[2:0];
-// 	else													  h_delta = selected_addr[2:0] - cursor_addr[2:0];
-	
-// 	if (cursor_addr[5:3] >= selected_addr[5:3]) v_delta = cursor_addr[5:3] - selected_addr[5:3];
-// 	else													  v_delta = selected_addr[5:3] - cursor_addr[5:3];
-// end
 
 // Logic to generate the move_is_legal signal
 always @(*) begin
