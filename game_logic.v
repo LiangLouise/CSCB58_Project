@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module B58_project( 
+module game_logic( 
     CLK, RESET,
     board_input,
     board_out_addr,
