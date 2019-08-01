@@ -86,7 +86,7 @@ localparam INITIAL = 3'b000,
 output reg[2:0] state;
 assign hilite_selected_square = (state == PIECE_MOVE);
 
-/* State Machine NSL and OFL */
+/* State Machine */
 always @ (posedge CLK, posedge RESET) begin
     if (RESET) begin
         // initialization code here
@@ -105,10 +105,12 @@ always @ (posedge CLK, posedge RESET) begin
         // State machine code from herPIECE_NONEe
         case (state)
             INITIAL :
+            // Start the game by pressing the KeyC
             begin
-                // State Transitions
-                state <= PIECE_SEL; // unconditional
-
+                if (keyC)
+                begin
+                    state <= PIECE_SEL;
+                end
                 // RTL operations
             end
 				
@@ -221,24 +223,6 @@ always @ (posedge CLK, posedge RESET) begin
 			cursor_addr <= cursor_addr + 5'b01_000; // Down Move, not allowed when y == 3
 	end
 end
-
-
-	
-/* Combinational logic to 1;determine if the selected piece can move as desired */
-// really only valid when 1;in PIECE_MOVE state
-// selected_contents is th1;e piece we're trying to move
-// selected_addr is the old location
-// cursor_addr is the destination square
-
-// cursor addr and selected addr are 6 bit numbers. 5:3 reps the row, 2:0 reps the col
-
-// always @(*) begin
-// 	if (cursor_addr[2:0] >= selected_addr[2:0]) h_delta = cursor_addr[2:0] - selected_addr[2:0];
-// 	else													  h_delta = selected_addr[2:0] - cursor_addr[2:0];
-	
-// 	if (cursor_addr[5:3] >= selected_addr[5:3]) v_delta = cursor_addr[5:3] - selected_addr[5:3];
-// 	else													  v_delta = selected_addr[5:3] - cursor_addr[5:3];
-// end
 
 // Logic to generate the move_is_legal signal
 always @(*) begin
