@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module B58_project( 
+module game_logic( 
     CLK, RESET,
     board_input,
     board_out_addr,
@@ -82,33 +82,37 @@ localparam INITIAL = 3'b000,
             PIECE_MOVE= 3'b010,
             WRITE_NEW_PIECE = 3'b011, 
             ERASE_OLD_PIECE = 3'b100,
-            FLIP_CHESS = 3'b101;
+            FLIP_CHESS = 3'b101,
+				NEXT_PLAYER = 3'b111;
 output reg[2:0] state;
 assign hilite_selected_square = (state == PIECE_MOVE);
 
 /* State Machine */
 always @ (posedge CLK, posedge RESET) begin
-    if (RESET == 1'b1) begin
-        state <= INITIAL;
+    if (RESET) begin
+	 
+					state <= INITIAL;
+					
+        // initialization code here
+				
+        
+	
     end
     else begin
         // State machine code from herPIECE_NONEe
         case (state)
-            INITIAL :
-            // Start the game by pressing the KeyC
-            begin
-            player_to_move <= COLOR_RED;
-        
-            cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
-            selected_addr <= 5'bXXXXX;
+            INITIAL : begin
+				
+					player_to_move <= COLOR_RED;
+					
+				  cursor_addr <= 5'b00_000; // select (0,0) as the cursor start postion 
+				  selected_addr <= 5'bXXXXX;
 
-            board_out_addr <= 5'b00_000;
-            board_out_piece <= 5'b0_000_0;
-            board_change_enable <= 0;
-            if (keyC)
-                begin
-                    state <= PIECE_SEL;
-                end
+				  board_out_addr <= 5'b00_000;
+				  board_out_piece <= 5'b0_000_0;
+				  board_change_enable <= 0;
+					
+					if (keyC) state <= PIECE_SEL;
             end
 				
 				
@@ -132,7 +136,8 @@ always @ (posedge CLK, posedge RESET) begin
                             if (cursor_contents[0] == STATE_COVERED)
                                 begin
                                 state <= FLIP_CHESS;
-								end
+										  end
+
                             else begin
                                 state <= PIECE_MOVE;
                             end
@@ -167,6 +172,15 @@ always @ (posedge CLK, posedge RESET) begin
                         end
 
                     end
+                    // else if (cursor_contents[3] == player_to_move
+                    //     && cursor_contents[2:0] != PIECE_NONE)
+                    // begin
+                    //     // they clicked their own piece
+                    //     selected_addr <= cursor_addr;
+                    // end
+					// 	  else begin
+					// 			state <= PIECE_SEL;
+					// 	  end
                 end
             end
 
@@ -175,19 +189,20 @@ always @ (posedge CLK, posedge RESET) begin
             WRITE_NEW_PIECE:
             begin
                 // State Transitions
-                state <= ERASE_OLD_PIECE;
+                
 
                 // RTL operations
                 // going to ERASE_OLD_PIECE
                 board_change_enable <= 1; // already done but it doesn't hurt here
                 board_out_addr <= selected_addr;
                 board_out_piece <= 4'b0000; // no piece
+					 state <= ERASE_OLD_PIECE;
             end
 
             ERASE_OLD_PIECE:
             begin
                 // State Transitions
-                state <= PIECE_SEL;
+                
 
                 // RTL operations
                 board_change_enable <= 0;
@@ -195,11 +210,15 @@ always @ (posedge CLK, posedge RESET) begin
                 board_out_piece <= 4'bXXXX;
 
                 player_to_move <= ~player_to_move;
+					 state <= NEXT_PLAYER;
             end
-
+				
+				NEXT_PLAYER: begin
+					player_to_move <= ~player_to_move;
+					state <= PIECE_SEL;	
+				end
 			endcase
-	 
-		 /* Cursor Movement Controls */
+	 /* Cursor Movement Controls */
 		 if      (keyL && cursor_addr[2:0] != 3'b000) 
 			cursor_addr <= cursor_addr - 5'b00_001; // Left move, not allowed when x == 0
 		 else if (keyR && cursor_addr[2:0] != 3'b111)
@@ -208,8 +227,10 @@ always @ (posedge CLK, posedge RESET) begin
 			cursor_addr <= cursor_addr - 5'b01_000; // Up Move, not allowed when y == 0 
 		 else if (keyD && cursor_addr[4:3] != 2'b11)
 			cursor_addr <= cursor_addr + 5'b01_000; // Down Move, not allowed when y == 3
+		 
 	end
 end
+
 
 // Logic to generate the move_is_legal signal
 always @(*) begin
@@ -221,27 +242,27 @@ always @(*) begin
                 if ((cursor_addr[4:3] > selected_addr[4:3])
 						 && ((cursor_addr[4:3] - selected_addr[4:3]) == 1)
 						 && ((cursor_addr[2:0] - selected_addr[2:0]) == 0))
-                   move_is_legal = 1;
+                   move_is_legal <= 1;
 
                 // if it moves upward 1 unit, it is allowed
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] == 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] == 0)
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
                 
                 // if it moves left 1 unit, it is allowed
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
 
                 
                 // if it moves right 1 unit, it is allowed
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal = 1;
-                else move_is_legal = 0;
+                        move_is_legal <= 1;
+                else move_is_legal <= 0;
             end
 
             else if (player_to_move == COLOR_BLACK) begin
@@ -249,28 +270,28 @@ always @(*) begin
                     cursor_addr[4:3] - selected_addr[4:3] ==1 && 
                     cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
                     
 
                 else if (cursor_addr[4:3] <= selected_addr[4:3] && 
                         cursor_addr[4:3] - selected_addr[4:3] == 1 && 
                         cursor_addr[2:0] - selected_addr[2:0] == 0)
                     
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
                     
                 
                 else if (cursor_addr[2:0] > selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 && 
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
                     
 
                 else if (cursor_addr[2:0] <= selected_addr[2:0] && 
                         cursor_addr[2:0] - selected_addr[2:0] == 1 &&
                         cursor_addr[4:3] - selected_addr[4:3] == 0)
-                        move_is_legal = 1;
+                        move_is_legal <= 1;
 
-                else move_is_legal = 0;
+                else move_is_legal <= 0;
             end
 		end
  end
